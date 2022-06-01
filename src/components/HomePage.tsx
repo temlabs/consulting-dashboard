@@ -1,28 +1,21 @@
 import { useEffect, useState } from "react";
-import { getProjects } from "../functions/requests";
-import { Project } from "../utils/interfaces";
+import { getAllProjectCardData } from "../functions/requests";
+import { ProjectCard } from "../utils/interfaces";
 
 export default function HomePage(): JSX.Element {
-  const [projectList, setProjectList] = useState<Project[]>([]);
+  const [projectCards, setProjectCards] = useState<ProjectCard[]>();
 
   useEffect(() => {
-    const testProjects = async () => {
-      try {
-        const projectsResponse: Project[] = await getProjects();
-        setProjectList(projectsResponse);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    testProjects();
+    getAllProjectCardData()
+      .then((pcd) => setProjectCards(pcd.projectCards))
+      .catch((e) => console.log(e));
   }, []);
 
   return (
     <div className=" flex flex-col">
       <h1> Home Page</h1>
-      {projectList.map((p) => (
-        <div key={p.id}>{p.id}</div>
+      {projectCards?.map((p) => (
+        <span key={p.id}> {`${p.clientName} ${p.contract.startDate}`}</span>
       ))}
     </div>
   );
