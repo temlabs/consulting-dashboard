@@ -18,7 +18,11 @@ module.exports = {
       }
     },
     variants: {
-      extend: {},
+      extend: {
+        textColor: ['responsive', 'hover', 'focus', 'group-hover'],
+        translate: ['hover'],
+        opacity: ['hover']
+      },
     },
     plugins: [],
   }
