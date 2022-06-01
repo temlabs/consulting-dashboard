@@ -1,3 +1,5 @@
+import { HomePage } from "../components/HomePage";
+
 export interface Client {
   id: string;
   name: string;
@@ -16,6 +18,8 @@ export interface Employee {
   avatar: string;
 }
 
+
+
 export interface Project {
   id: string;
   clientId: string;
@@ -26,4 +30,16 @@ export interface Project {
 export interface IProjectCard extends Project {
   clientName: string | undefined;
   employees: (Employee | undefined)[];
+  projectName: string;
+}
+
+export interface IProjectCardPredicate {
+  id: string;
+  func: (p: IProjectCard, state: HomePage) => boolean;
+};
+
+export interface ProjectComposite {
+  projectCards: IProjectCard[];
+  clients: Client[];
+  employees: Employee[];
 }
