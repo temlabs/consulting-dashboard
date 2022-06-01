@@ -1,7 +1,7 @@
 import { greet } from "./utils/greet";
-
+import { TestingTailwind } from './components/TestingTailwind'
 function App(): JSX.Element {
-  return <h1>{greet("World")}</h1>;
+  return <TestingTailwind text={'Hello this is a test!'}></TestingTailwind>;
 }
 
 export default App;
