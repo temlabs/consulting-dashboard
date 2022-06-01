@@ -29,3 +29,9 @@
   font-weight: light;
   font-style: normal;
 }
+
+@layer components {
+  .pcard {
+    @apply hover:translate-x-5;
+  }
+}

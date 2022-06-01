@@ -14,7 +14,7 @@ export default function ProjectCard(props: IProjectCard): JSX.Element {
   const displayEmployees = props.employees.slice(0, 3);
 
   return (
-    <div className=" hover:translate-x-6 bg-white flex flex-col px-3 py-3 w-10/12 h-40 mb-8 rounded-xl ">
+    <div className=" hover:text-accent-teal bg-white flex flex-col px-3 py-3 w-10/12 h-40 mb-8 rounded-xl ">
       <div className="flex flex-row align-middle justify-between ">
         <div className="flex flex-row items-end">
           <h2 className=" font-bold text-xl ">{projectName}</h2>
@@ -27,7 +27,7 @@ export default function ProjectCard(props: IProjectCard): JSX.Element {
       </p>
       <div className="flex flex-row mt-2 relative items-end">
         {displayEmployees.map((e) => (
-          <span key={e?.id}>
+          <span key={e?.id} className="group">
             <img
               key={`${e?.id}-img`}
               src={e?.avatar}
@@ -36,7 +36,7 @@ export default function ProjectCard(props: IProjectCard): JSX.Element {
             />
             <p
               key={`${e?.id}-p`}
-              className="absolute opacity-0 group-hover:opacity-100"
+              className="absolute transition-opacity opacity-0 group-hover:opacity-70 bg-black text-white text-xs rounded-lg p-2"
             >
               {e?.name}
             </p>
