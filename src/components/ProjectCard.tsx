@@ -1,9 +1,19 @@
 import { IProjectCard } from "../utils/interfaces";
 
 export default function ProjectCard(props: IProjectCard): JSX.Element {
-  const projectName = props.clientName;
-  const projectDates = `${props.contract.startDate} - ${props.contract.endDate}`;
-  const projectSize = `£${props.contract.size}`;
+  const startDateSplit = props.contract.startDate.split(" ");
+  const endDateSplit = props.contract.endDate.split(" ");
+  const startMonth = startDateSplit[1];
+  const startYear = startDateSplit[3];
+  const projectName = `${props.clientName} (${startMonth} ${startYear})`;
+  const projectDates = `${startDateSplit.slice(1).join(" ")} - ${endDateSplit
+    .slice(1)
+    .join(" ")}`;
+
+  const projectSize = `£${Number(
+    Number.parseFloat(props.contract.size).toFixed(2)
+  ).toLocaleString("en-US")}`;
+
   const numberOfEmployees = props.employeeIds.length;
   let numberOfEmployeesText =
     numberOfEmployees === 1 ? "employee" : "employees";
