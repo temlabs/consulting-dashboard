@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { getAllProjectCardData } from "../functions/requests";
-import { ProjectCard } from "../utils/interfaces";
+import { IProjectCard } from "../utils/interfaces";
+import ProjectCard from "./ProjectCard";
 
 export default function HomePage(): JSX.Element {
-  const [projectCards, setProjectCards] = useState<ProjectCard[]>();
+  const [projectCards, setProjectCards] = useState<IProjectCard[]>();
 
   useEffect(() => {
     getAllProjectCardData()
@@ -12,11 +13,13 @@ export default function HomePage(): JSX.Element {
   }, []);
 
   return (
-    <div className=" flex flex-col">
-      <h1> Home Page</h1>
-      {projectCards?.map((p) => (
-        <span key={p.id}> {`${p.clientName} ${p.contract.startDate}`}</span>
-      ))}
+    <div className=" flex flex-col w-full">
+      <h1 className=" font-bold text-tertiary-text m-7"> Home Page</h1>
+      <section className=" flex flex-col w-full items-center">
+        {projectCards?.map((p) => (
+          <ProjectCard key={p.id} {...p}></ProjectCard>
+        ))}
+      </section>
     </div>
   );
 }

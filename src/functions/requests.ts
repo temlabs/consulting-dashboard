@@ -8,7 +8,7 @@
 
 */
 
-import { Project, ProjectCard, Employee, Client } from "../utils/interfaces";
+import { Project, IProjectCard, Employee, Client } from "../utils/interfaces";
 
 import { projectsURL, clientsURL, employeesURL } from "./../utils/endpoints";
 
@@ -86,14 +86,14 @@ export async function getEmployeeById(employeeId: string): Promise<Employee> {
   }
 }
 
-async function projectToProjectCard(project: Project): Promise<ProjectCard> {
+async function projectToProjectCard(project: Project): Promise<IProjectCard> {
   try {
     const clientName = (await getClientById(project.clientId)).name;
     const employeeIds = project.employeeIds;
     const employees: Employee[] = await Promise.all(
       employeeIds.map(async (eid) => await getEmployeeById(eid))
     );
-    const projectCardData: ProjectCard = { ...project, clientName, employees };
+    const projectCardData: IProjectCard = { ...project, clientName, employees };
     return projectCardData;
   } catch (error) {
     const errorMessage = getErrorMessage(error);
@@ -116,7 +116,7 @@ async function projectToProjectCard(project: Project): Promise<ProjectCard> {
 // }
 
 export async function getAllProjectCardData(): Promise<{
-  projectCards: ProjectCard[];
+  projectCards: IProjectCard[];
   clients: Client[];
   employees: Employee[];
 }> {
@@ -124,14 +124,14 @@ export async function getAllProjectCardData(): Promise<{
   const allClients = await getAllClients();
   const allEmployees = await getAllEmployees();
 
-  const allProjectCards: ProjectCard[] = allProjects.map((p) => {
+  const allProjectCards: IProjectCard[] = allProjects.map((p) => {
     const clientName = allClients.find((c) => c.id === p.clientId)?.name;
     const employees = p.employeeIds.map((eid) => {
       const employee = allEmployees.find((e) => e.id === eid);
       return employee;
     });
 
-    const projectCard: ProjectCard = { ...p, clientName, employees };
+    const projectCard: IProjectCard = { ...p, clientName, employees };
     return projectCard;
   });
 
@@ -145,10 +145,10 @@ export async function getAllProjectCardData(): Promise<{
 
 export async function getProjectCardDataById(
   projectId: string
-): Promise<ProjectCard> {
+): Promise<IProjectCard> {
   try {
     const project: Project = await getProjectById(projectId);
-    const projectCard: ProjectCard = await projectToProjectCard(project);
+    const projectCard: IProjectCard = await projectToProjectCard(project);
     return projectCard;
   } catch (error) {
     const errorMessage = getErrorMessage(error);

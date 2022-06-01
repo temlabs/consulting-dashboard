@@ -23,7 +23,7 @@ export interface Project {
   contract: Contract;
 }
 
-export interface ProjectCard extends Project {
+export interface IProjectCard extends Project {
   clientName: string | undefined;
   employees: (Employee | undefined)[];
 }
