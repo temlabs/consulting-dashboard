@@ -2,6 +2,7 @@ import { TestingTailwind } from "./components/TestingTailwind";
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
+import HomePage from "./components/HomePage";
 
 function App(): JSX.Element {
   return (
@@ -9,10 +10,7 @@ function App(): JSX.Element {
       <BrowserRouter>
         <Sidebar />
         <Routes>
-          <Route
-            path="/"
-            element={<TestingTailwind text={"This is a test!"} />}
-          />
+          <Route path="/" element={<HomePage />} />
 
           <Route path="teams">
             <Route index element={<TestingTailwind text={"This is Teams"} />} />
