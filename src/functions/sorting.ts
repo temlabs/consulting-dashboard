@@ -58,7 +58,6 @@ function sortProjectsBySize(
   b: IProjectCard,
   ascending: boolean
 ): number {
-  console.log(a.contract.size, parseInt(a.contract.size));
   if (ascending) {
     return parseFloat(a.contract.size) - parseFloat(b.contract.size);
   } else {

@@ -21,10 +21,14 @@ export default function ProjectCard(props: IProjectCard): JSX.Element {
   const displayEmployees = props.employees.slice(0, 3);
 
   return (
-    <div className=" highlight hover:text-accent-teal bg-white flex flex-col px-3 py-3 w-10/12 h-40 mb-8 rounded-xl ">
+    <div className=" shadow-lg highlight hover:text-accent-teal bg-white flex flex-col px-3 py-3 w-10/12 h-40 mb-8 rounded-xl ">
       <div className="flex flex-row align-middle justify-between ">
         <div className="flex flex-row items-end">
-          <h2 className=" font-bold text-xl ">{props.projectName}</h2>
+          <Link to={`/projects/${props.id}`}>
+            <h2 className=" cursor-pointer hover:text-accent-teal font-bold text-xl ">
+              {props.projectName}
+            </h2>
+          </Link>
           <h3 className="text-secondary-text px-8">{projectDates}</h3>
         </div>
         <h2 className="font-bold text-xl mr-14">{projectSize}</h2>
