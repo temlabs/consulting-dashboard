@@ -3,6 +3,7 @@ import { TestingTailwind } from "./components/TestingTailwind";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import HomePage from "./components/HomePage";
+import EmployeeProfile from "./components/EmployeeProfile";
 
 function App(): JSX.Element {
   return (
@@ -12,12 +13,9 @@ function App(): JSX.Element {
         <Routes>
           <Route path="/" element={<HomePage />} />
 
-          <Route path="teams">
+          <Route path="employees">
             <Route index element={<TestingTailwind text={"This is Teams"} />} />
-            <Route
-              path=":teamId"
-              element={<TestingTailwind text={"This is Teams with an ID!"} />}
-            />
+            <Route path=":employeeId" element={<EmployeeProfile />} />
           </Route>
           <Route
             path="*"
