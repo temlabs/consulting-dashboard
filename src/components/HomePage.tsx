@@ -17,6 +17,12 @@ import {
 import { Moment } from "moment";
 import { RangeValue } from "rc-picker/lib/interface";
 import { sortingTypes } from "../functions/sorting";
+import KPICard from "./KPICard";
+import {
+  sumProjectCardContractSize,
+  sumProjectCardDays,
+} from "../functions/aggregating";
+import { formatProjectSize } from "../functions/formatting";
 
 export interface IHomePage {
   projectCards: IProjectCard[];
@@ -110,12 +116,30 @@ export default function HomePage(): JSX.Element {
     .filter((p) => testPredicates(p, state))
     .sort((a, b) => callSort(a, b));
   const numberOfProjectsShowing = `${projectCardsOnDisplay.length} projects showing of ${state.projectCards.length}`;
+  const totalRevenueFromProjectsShowing = formatProjectSize(
+    sumProjectCardContractSize(projectCardsOnDisplay).toString()
+  );
+  const revenueDescription = "Total revenue generated in date range";
+
+  const numberOfWorkingDays = sumProjectCardDays(projectCardsOnDisplay);
+  const numberOfWorkingDaysDescription =
+    "Total days spent on projects in date range";
 
   return (
     <div className=" flex flex-col w-10/12 justify-start items-center">
       <h1 className=" font-bold text-2xl text-tertiary-text m-7 ml-20 opacity-40">
         Home Page
       </h1>
+      <section className=" flex flex-row w-10/12 items-center justify-start my-16">
+        <KPICard
+          mainFigure={totalRevenueFromProjectsShowing}
+          description={revenueDescription}
+        />
+        <KPICard
+          mainFigure={numberOfWorkingDays.toString()}
+          description={numberOfWorkingDaysDescription}
+        />
+      </section>
 
       <section className=" flex flex-col w-full items-center">
         <FilterBar state={state} dispatch={dispatch}>
