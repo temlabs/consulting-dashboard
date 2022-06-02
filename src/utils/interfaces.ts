@@ -1,4 +1,4 @@
-import { HomePage } from "../components/HomePage";
+import { IHomePage } from "../components/HomePage";
 
 export interface Client {
   id: string;
@@ -18,8 +18,6 @@ export interface Employee {
   avatar: string;
 }
 
-
-
 export interface Project {
   id: string;
   clientId: string;
@@ -33,10 +31,16 @@ export interface IProjectCard extends Project {
   projectName: string;
 }
 
-export interface IProjectCardPredicate {
-  id: string;
-  func: (p: IProjectCard, state: HomePage) => boolean;
-};
+export type IProjectCardPredicate = (
+  p: IProjectCard,
+  state: IHomePage
+) => boolean;
+export type IProjectSortPredicate = (
+  a: IProjectCard,
+  b: IProjectCard,
+  ascending: boolean,
+  dateType?: "startDate" | "endDate"
+) => number;
 
 export interface ProjectComposite {
   projectCards: IProjectCard[];
