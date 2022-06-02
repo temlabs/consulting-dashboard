@@ -18,7 +18,7 @@ export default function Sidebar(): JSX.Element {
   ];
 
   return (
-    <div className="flex flex-col px-5 py-9 bg-primary-deep text-white font-inter font-bold w-60 h-screen top-0 sticky">
+    <div className=" flex flex-col px-5 py-9 bg-primary-deep text-white font-inter font-bold w-60 h-screen top-0 sticky">
       {links.map((l) => (
         <Link
           key={l.displayName}

@@ -38,7 +38,9 @@ export function isSearchTextInProjectName(
   p: IProjectCard,
   state: IHomePage
 ): boolean {
-  const result = p.projectName.includes(state.searchText.trim());
+  const result = p.projectName
+    .toUpperCase()
+    .includes(state.searchText.trim().toUpperCase());
   return result;
 }
 

@@ -5,7 +5,7 @@ export default function EmployeeRow(e: Employee): JSX.Element {
   return (
     <>
       <Link className="w-full" to={`/employees/${e.id}`}>
-        <div className="flex flex-col cursor-pointer bg-white my-2 rounded-lg pl-8 h-40 w-full justify-center items-start transition-all  group">
+        <div className=" shadow-lg flex flex-col cursor-pointer bg-white my-2 rounded-lg pl-8 h-40 w-full justify-center items-start transition-all  group">
           <div className="flex flex-row justify-start items-center py-2">
             <img
               src={e.avatar}
