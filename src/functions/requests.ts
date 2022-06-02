@@ -8,7 +8,14 @@
 
 */
 
-import { Project, IProjectCard, Employee, Client } from "../utils/interfaces";
+import {
+  Project,
+  IProjectCard,
+  Employee,
+  Client,
+  ProjectComposite,
+} from "../utils/interfaces";
+import { formatProjectName } from "./formatting";
 
 import { projectsURL, clientsURL, employeesURL } from "./../utils/endpoints";
 
@@ -93,7 +100,16 @@ async function projectToProjectCard(project: Project): Promise<IProjectCard> {
     const employees: Employee[] = await Promise.all(
       employeeIds.map(async (eid) => await getEmployeeById(eid))
     );
-    const projectCardData: IProjectCard = { ...project, clientName, employees };
+    const projectName = formatProjectName(
+      clientName,
+      project.contract.startDate
+    );
+    const projectCardData: IProjectCard = {
+      ...project,
+      clientName,
+      employees,
+      projectName,
+    };
     return projectCardData;
   } catch (error) {
     const errorMessage = getErrorMessage(error);
@@ -115,11 +131,7 @@ async function projectToProjectCard(project: Project): Promise<IProjectCard> {
 //     }
 // }
 
-export async function getAllProjectCardData(): Promise<{
-  projectCards: IProjectCard[];
-  clients: Client[];
-  employees: Employee[];
-}> {
+export async function getAllProjectCardData(): Promise<ProjectComposite> {
   const allProjects = await getAllProjects();
   const allClients = await getAllClients();
   const allEmployees = await getAllEmployees();
@@ -131,7 +143,16 @@ export async function getAllProjectCardData(): Promise<{
       return employee;
     });
 
-    const projectCard: IProjectCard = { ...p, clientName, employees };
+    const projectName = formatProjectName(
+      clientName ?? "Client Unknown",
+      p.contract.startDate
+    );
+    const projectCard: IProjectCard = {
+      ...p,
+      clientName,
+      employees,
+      projectName,
+    };
     return projectCard;
   });
 

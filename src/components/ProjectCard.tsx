@@ -3,9 +3,6 @@ import { IProjectCard } from "../utils/interfaces";
 export default function ProjectCard(props: IProjectCard): JSX.Element {
   const startDateSplit = props.contract.startDate.split(" ");
   const endDateSplit = props.contract.endDate.split(" ");
-  const startMonth = startDateSplit[1];
-  const startYear = startDateSplit[3];
-  const projectName = `${props.clientName} (${startMonth} ${startYear})`;
   const projectDates = `${startDateSplit.slice(1).join(" ")} - ${endDateSplit
     .slice(1)
     .join(" ")}`;
@@ -24,10 +21,10 @@ export default function ProjectCard(props: IProjectCard): JSX.Element {
   const displayEmployees = props.employees.slice(0, 3);
 
   return (
-    <div className=" hover:text-accent-teal bg-white flex flex-col px-3 py-3 w-10/12 h-40 mb-8 rounded-xl ">
+    <div className=" highlight hover:text-accent-teal bg-white flex flex-col px-3 py-3 w-10/12 h-40 mb-8 rounded-xl ">
       <div className="flex flex-row align-middle justify-between ">
         <div className="flex flex-row items-end">
-          <h2 className=" font-bold text-xl ">{projectName}</h2>
+          <h2 className=" font-bold text-xl ">{props.projectName}</h2>
           <h3 className="text-secondary-text px-8">{projectDates}</h3>
         </div>
         <h2 className="font-bold text-xl mr-14">{projectSize}</h2>
