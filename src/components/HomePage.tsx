@@ -112,7 +112,7 @@ export default function HomePage(): JSX.Element {
   const numberOfProjectsShowing = `${projectCardsOnDisplay.length} projects showing of ${state.projectCards.length}`;
 
   return (
-    <div className=" flex flex-col w-full">
+    <div className=" flex flex-col w-10/12 justify-start items-center">
       <h1 className=" font-bold text-2xl text-tertiary-text m-7 ml-20 opacity-40">
         Home Page
       </h1>

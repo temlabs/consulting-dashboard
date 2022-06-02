@@ -8,3 +8,9 @@ export function formatProjectName(
   const projectName = `${clientName} (${startMonth} ${startYear})`;
   return projectName;
 }
+
+export function formatProjectSize(size: string): string {
+  return `£${Number(Number.parseFloat(size).toFixed(2)).toLocaleString(
+    "en-US"
+  )}`;
+}

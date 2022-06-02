@@ -1,4 +1,6 @@
 import { IProjectCard } from "../utils/interfaces";
+import { formatProjectSize } from "../functions/formatting";
+import { Link } from "react-router-dom";
 
 export default function ProjectCard(props: IProjectCard): JSX.Element {
   const startDateSplit = props.contract.startDate.split(" ");
@@ -7,9 +9,7 @@ export default function ProjectCard(props: IProjectCard): JSX.Element {
     .slice(1)
     .join(" ")}`;
 
-  const projectSize = `£${Number(
-    Number.parseFloat(props.contract.size).toFixed(2)
-  ).toLocaleString("en-US")}`;
+  const projectSize = formatProjectSize(props.contract.size);
 
   const numberOfEmployees = props.employeeIds.length;
   let numberOfEmployeesText =
@@ -35,12 +35,14 @@ export default function ProjectCard(props: IProjectCard): JSX.Element {
       <div className="flex flex-row mt-2 relative items-end">
         {displayEmployees.map((e) => (
           <span key={e?.id} className="group">
-            <img
-              key={`${e?.id}-img`}
-              src={e?.avatar}
-              alt={e?.name}
-              className=" rounded-full w-8 mx-1"
-            />
+            <Link to={`/employees/${e?.id}`}>
+              <img
+                key={`${e?.id}-img`}
+                src={e?.avatar}
+                alt={e?.name}
+                className=" rounded-full w-8 mx-1"
+              />
+            </Link>
             <p
               key={`${e?.id}-p`}
               className="absolute transition-opacity opacity-0 group-hover:opacity-70 bg-black text-white text-xs rounded-lg p-2"
