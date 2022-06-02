@@ -38,13 +38,22 @@ export default function FilterBar({
     <>
       <div className="flex flex-col w-full items-center">
         <div className="flex flex-row justify-start bg-white w-10/12 h-24 mb-4 rounded-lg items-baseline">
-          <input
-            className=" outline-none mx-8 rounded-md border-primary-light h-6 w-80 mt-5 border-2"
-            value={state.searchText}
-            onChange={(e) =>
-              dispatch({ type: "setSearchText", newSearchText: e.target.value })
-            }
-          />
+          <div className="flex flex-row items-baseline justify-around">
+            <i className=" ml-4 material-icons transform translate-y-2 opacity-60">
+              search
+            </i>
+            <input
+              placeholder="Project name"
+              className=" outline-none mr-8 rounded-md border-primary-light h-6 w-80 mt-5 border-2"
+              value={state.searchText}
+              onChange={(e) =>
+                dispatch({
+                  type: "setSearchText",
+                  newSearchText: e.target.value,
+                })
+              }
+            />
+          </div>
           <div>
             <DatePicker.RangePicker
               picker="date"
@@ -78,9 +87,13 @@ export default function FilterBar({
           <select
             value={state.sort.displayName}
             onChange={(e) => updateSortPredicate(e.target.value)}
+            className=" bg-accent-teal text-white rounded-md h-8 w-48 font-semibold cursor-pointer text-center"
           >
             {sortingTypes.map((st) => (
-              <option key={st.displayName}> {st.displayName}</option>
+              <option key={st.displayName} className=" bg-gray-500">
+                {" "}
+                {st.displayName}
+              </option>
             ))}
           </select>
         </div>
