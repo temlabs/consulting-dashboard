@@ -8,11 +8,11 @@ export default function Sidebar(): JSX.Element {
       displayName: "Home",
     },
     {
-      to: "/Clients",
+      to: "/clients",
       displayName: "Clients",
     },
     {
-      to: "/Employees",
+      to: "/employees",
       displayName: "Employees",
     },
   ];

@@ -9,13 +9,13 @@ interface IEmployeeProfilePage {
   employeeProjects: IProjectCard[];
 }
 
-type EmployeePageAction =
+type EmployeeProfilePageAction =
   | { type: "setEmployeeData"; employeeData: Employee }
   | { type: "setProjectCardData"; projectCards: IProjectCard[] };
 
 function reducer(
   state: IEmployeeProfilePage,
-  action: EmployeePageAction
+  action: EmployeeProfilePageAction
 ): IEmployeeProfilePage {
   switch (action.type) {
     case "setEmployeeData":
@@ -27,7 +27,7 @@ function reducer(
   }
 }
 
-export default function EmployeeProfile(): JSX.Element {
+export default function EmployeeProfilePage(): JSX.Element {
   const { employeeId } = useParams();
   const emptyEmployeeProfilePage: IEmployeeProfilePage = {
     employee: undefined,
@@ -61,6 +61,7 @@ export default function EmployeeProfile(): JSX.Element {
         <div className="ml-10 flex flex-col">
           <h1 className=" font-bold text-2xl m-0">{state.employee?.name}</h1>
           <h3 className=" font-semibold text-xl m-0">{state.employee?.role}</h3>
+          <h3 className=" font-semibold text-xl m-0 ">{`${state.employeeProjects.length} projects`}</h3>
         </div>
       </section>
       {state.employeeProjects.map((p) => (
