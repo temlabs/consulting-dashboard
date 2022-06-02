@@ -51,7 +51,10 @@ export default function EmployeeProfilePage(): JSX.Element {
   }, [employeeId]);
 
   return (
-    <section className="flex flex-col w-10/12 justify-center items-center">
+    <section className="flex flex-col w-10/12 justify-start items-center">
+      <h1 className=" font-bold text-2xl text-tertiary-text m-7 ml-20 opacity-40">
+        Employee Profile
+      </h1>
       <section className="flex flex-row justify-start items-center w-10/12 py-10">
         <img
           src={state.employee?.avatar}

@@ -22,7 +22,7 @@ export default function Sidebar(): JSX.Element {
       {links.map((l) => (
         <Link
           key={l.displayName}
-          className=" my-2 text-white hover:text-white hover:underline"
+          className=" my-2 text-white hover:text-white hover:underline text-xl"
           to={l.to}
         >
           {l.displayName}
