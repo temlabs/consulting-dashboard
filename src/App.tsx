@@ -6,6 +6,7 @@ import HomePage from "./components/HomePage";
 import EmployeeProfilePage from "./components/EmployeeProfilePage";
 import EmployeesPage from "./components/EmployeesPage";
 import ClientProfilePage from "./components/ClientProfilePage";
+import ClientsPage from "./components/ClientsPage";
 
 function App(): JSX.Element {
   return (
@@ -20,10 +21,7 @@ function App(): JSX.Element {
             <Route path=":employeeId" element={<EmployeeProfilePage />} />
           </Route>
           <Route path="clients">
-            <Route
-              index
-              element={<TestingTailwind text={"This page doesn't exist yet"} />}
-            />
+            <Route index element={<ClientsPage />} />
             <Route path=":clientId" element={<ClientProfilePage />} />
           </Route>
           <Route
