@@ -1,13 +1,13 @@
-import { IHomePage } from "./HomePage";
-import { Dispatch } from "../utils/types";
+import { IHomePageState } from "../utils/interfaces";
+import { HomePageDispatch } from "../utils/types";
 import { DatePicker } from "antd";
 import moment, { Moment } from "moment";
 import { RangeValue } from "rc-picker/lib/interface";
 import { sortingTypes } from "../functions/sorting";
 
 interface FilterBarProps {
-  state: IHomePage;
-  dispatch: Dispatch;
+  state: IHomePageState;
+  dispatch: HomePageDispatch;
   children: string;
 }
 
@@ -16,10 +16,7 @@ export default function FilterBar({
   dispatch,
   children,
 }: FilterBarProps): JSX.Element {
-  function updateDateRange(
-    values: RangeValue<Moment>,
-    formatstring: [string, string]
-  ): void {
+  function updateDateRange(values: RangeValue<Moment>): void {
     if (values !== undefined && values !== null && values[0] && values[1]) {
       dispatch({ type: "setDateRange", newDateRange: values });
     } else {
@@ -79,7 +76,13 @@ export default function FilterBar({
                   moment().startOf("month"),
                   moment().endOf("month"),
                 ],
+                "Last Year": [
+                  moment().subtract(1, "year").startOf("year"),
+                  moment().subtract(1, "year").startOf("year"),
+                ],
+                "This Year": [moment().startOf("year"), moment()],
               }}
+              value={state.dateRange}
             />
           </div>
         </div>
@@ -87,7 +90,7 @@ export default function FilterBar({
           <select
             value={state.sort.displayName}
             onChange={(e) => updateSortPredicate(e.target.value)}
-            className=" bg-accent-teal text-white rounded-md h-8 w-48 font-semibold cursor-pointer text-center"
+            className=" bg-accent-teal text-white rounded-md h-8 w-52 font-semibold cursor-pointer text-center"
           >
             {sortingTypes.map((st) => (
               <option key={st.displayName} className=" bg-gray-500">

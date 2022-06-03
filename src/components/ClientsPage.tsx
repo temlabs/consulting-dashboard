@@ -1,4 +1,5 @@
 import { useEffect, useReducer } from "react";
+import { alertError } from "../functions/errorhandling";
 import { getAllClients } from "../functions/requests";
 import { Client } from "../utils/interfaces";
 import ClientRow from "./ClientRow";
@@ -24,13 +25,13 @@ export default function ClientsPage(): JSX.Element {
   const [state, dispatch] = useReducer(reducer, empyEmployeesPage);
 
   useEffect(() => {
-    getAllClients().then((c) =>
-      dispatch({ type: "setClients", clientList: c })
-    );
+    getAllClients()
+      .then((c) => dispatch({ type: "setClients", clientList: c }))
+      .catch((e) => alertError(e));
   }, []);
 
   return (
-    <section className="flex flex-col w-10/12 justify-center items-center rounded-lg px-20 mb-20">
+    <section className="flex flex-col w-10/12 justify-start items-center rounded-lg px-20 mb-20">
       <h1 className=" font-bold text-2xl text-tertiary-text m-7 ml-20 opacity-40">
         Clients List
       </h1>

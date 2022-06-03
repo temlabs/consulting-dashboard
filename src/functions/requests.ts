@@ -1,13 +1,3 @@
-/**
-    /clients
-    /clients/{clientId}
-    /employees
-    /employees/{employeeId}
-    /projects
-    /projects/{projectId}
-
-*/
-
 import {
   Project,
   IProjectCard,
@@ -16,8 +6,8 @@ import {
   ProjectComposite,
 } from "../utils/interfaces";
 import { formatProjectName } from "./formatting";
-
 import { projectsURL, clientsURL, employeesURL } from "./../utils/endpoints";
+import { getErrorMessage } from "./errorhandling";
 
 // PROJECTS
 export async function getAllProjects(): Promise<Project[]> {
@@ -186,16 +176,4 @@ async function get<T>(endpoint: string): Promise<T> {
   });
   const data: Promise<T> = response.json();
   return data;
-}
-
-function errorHasMessage(error: unknown): boolean {
-  return typeof error === "object" && error !== null && "message" in error;
-}
-
-function getErrorMessage(error: unknown): string {
-  if (errorHasMessage(error)) {
-    return (error as Error).message;
-  } else {
-    return JSON.stringify(error);
-  }
 }

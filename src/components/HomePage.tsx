@@ -1,21 +1,11 @@
 import { useEffect, useReducer } from "react";
 import { getAllProjectCardData } from "../functions/requests";
-import {
-  Client,
-  Employee,
-  IProjectCard,
-  IProjectCardPredicate,
-} from "../utils/interfaces";
-import { Action, Sort } from "../utils/types";
 import ProjectCard from "./ProjectCard";
 import FilterBar from "./FilterBar";
 import {
-  testPredicates,
   isSearchTextInProjectName,
   isProjectInDateRange,
 } from "../functions/filtering";
-import { Moment } from "moment";
-import { RangeValue } from "rc-picker/lib/interface";
 import { sortingTypes } from "../functions/sorting";
 import KPICard from "./KPICard";
 import {
@@ -23,67 +13,17 @@ import {
   sumProjectCardDays,
 } from "../functions/aggregating";
 import { formatProjectSize } from "../functions/formatting";
-
-export interface IHomePage {
-  projectCards: IProjectCard[];
-  clients: Client[];
-  employees: Employee[];
-  filterPreds: IProjectCardPredicate[];
-  searchText: string;
-  searchTextPredicate: IProjectCardPredicate;
-  dateRange: RangeValue<Moment> | undefined;
-  dateRangePredicate: IProjectCardPredicate;
-  filteredEmployees: Employee[];
-  filteredClients: Client[];
-  sort: Sort;
-}
-
-function reducer(state: IHomePage, action: Action): IHomePage {
-  switch (action.type) {
-    case "addClientToFilter":
-      return {
-        ...state,
-        filteredClients: [...state.filteredClients, action.clientToAdd],
-      };
-    case "removeClientFromFilter":
-      return {
-        ...state,
-        filteredClients: state.filteredClients.filter(
-          (c) => c.id !== action.clientToREmove.id
-        ),
-      };
-    case "addEmployeeToFilter":
-      return {
-        ...state,
-        filteredEmployees: [...state.filteredEmployees, action.employeeToAdd],
-      };
-    case "removeEmployeeFromFilter":
-      return {
-        ...state,
-        filteredEmployees: state.filteredEmployees.filter(
-          (e) => e.id !== action.employeeToRemove.id
-        ),
-      };
-    case "setSearchText":
-      return { ...state, searchText: action.newSearchText };
-    case "setDateRange":
-      return { ...state, dateRange: action.newDateRange };
-    case "setSort":
-      return { ...state, sort: action.newSort };
-    case "setData":
-      return {
-        ...state,
-        projectCards: action.data.projectCards,
-        clients: action.data.clients,
-        employees: action.data.employees,
-      };
-    default:
-      return state;
-  }
-}
+import {
+  initialiseHomePage,
+  homePageReducer,
+  saveFiltersToSessionStorage,
+  filterAndSortProjectCards,
+} from "../functions/Page Specific/homepagefunctions";
+import { IHomePageState } from "../utils/interfaces";
+import { alertError } from "../functions/errorhandling";
 
 export default function HomePage(): JSX.Element {
-  const initialHomePage: IHomePage = {
+  const preInitialHomePage: IHomePageState = {
     projectCards: [],
     clients: [],
     employees: [],
@@ -96,25 +36,25 @@ export default function HomePage(): JSX.Element {
     filteredEmployees: [],
     sort: sortingTypes[0],
   };
-  const [state, dispatch] = useReducer(reducer, initialHomePage);
+  const [state, dispatch] = useReducer(
+    homePageReducer,
+    preInitialHomePage,
+    initialiseHomePage
+  );
 
   useEffect(() => {
     getAllProjectCardData()
       .then((pcd) => dispatch({ type: "setData", data: pcd }))
-      .catch((e) => console.log(e));
+      .catch((e) => alertError(e));
   }, []);
 
-  const callSort = (a: IProjectCard, b: IProjectCard) => {
-    const argsArr = state.sort.args;
-    if (argsArr[1]) {
-      return state.sort.sortPredicate(a, b, argsArr[0], argsArr[1]);
-    } else {
-      return state.sort.sortPredicate(a, b, argsArr[0]);
-    }
-  };
-  const projectCardsOnDisplay = state.projectCards
-    .filter((p) => testPredicates(p, state))
-    .sort((a, b) => callSort(a, b));
+  useEffect(() => {
+    saveFiltersToSessionStorage(state);
+  }, [state]);
+
+  const projectCardsOnDisplay = filterAndSortProjectCards(state);
+
+  // FORMAT TEXT STRINGS
   const numberOfProjectsShowing = `${projectCardsOnDisplay.length} projects showing of ${state.projectCards.length}`;
   const totalRevenueFromProjectsShowing = formatProjectSize(
     sumProjectCardContractSize(projectCardsOnDisplay).toString()

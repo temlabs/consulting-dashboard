@@ -1,8 +1,16 @@
-import { IHomePage } from "../components/HomePage";
+import { Moment } from "moment";
+import { RangeValue } from "rc-picker/lib/interface";
 
 export interface Client {
   id: string;
   name: string;
+}
+
+export interface IClientProfilePageState {
+  client: Client | undefined;
+  projects: IProjectCard[];
+  employees: Employee[];
+  projectsView: boolean;
 }
 
 export interface Contract {
@@ -16,6 +24,25 @@ export interface Employee {
   name: string;
   role: string;
   avatar: string;
+}
+
+export interface IEmployeeProfilePageState {
+  employee: Employee | undefined;
+  employeeProjects: IProjectCard[];
+}
+
+export interface IHomePageState {
+  projectCards: IProjectCard[];
+  clients: Client[];
+  employees: Employee[];
+  filterPreds: IProjectCardPredicate[];
+  searchText: string;
+  searchTextPredicate: IProjectCardPredicate;
+  dateRange: RangeValue<Moment> | undefined;
+  dateRangePredicate: IProjectCardPredicate;
+  filteredEmployees: Employee[];
+  filteredClients: Client[];
+  sort: Sort;
 }
 
 export interface Project {
@@ -33,7 +60,7 @@ export interface IProjectCard extends Project {
 
 export type IProjectCardPredicate = (
   p: IProjectCard,
-  state: IHomePage
+  state: IHomePageState
 ) => boolean;
 export type IProjectSortPredicate = (
   a: IProjectCard,
@@ -46,4 +73,10 @@ export interface ProjectComposite {
   projectCards: IProjectCard[];
   clients: Client[];
   employees: Employee[];
+}
+
+export interface Sort {
+  displayName: string;
+  sortPredicate: IProjectSortPredicate;
+  ascending: boolean;
 }

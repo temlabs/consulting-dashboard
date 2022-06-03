@@ -1,4 +1,5 @@
 import { useEffect, useReducer } from "react";
+import { alertError } from "../functions/errorhandling";
 import { getAllEmployees } from "../functions/requests";
 import { Employee } from "../utils/interfaces";
 import EmployeeRow from "./EmployeeRow";
@@ -27,13 +28,13 @@ export default function EmployeesPage(): JSX.Element {
   const [state, dispatch] = useReducer(reducer, empyEmployeesPage);
 
   useEffect(() => {
-    getAllEmployees().then((e) =>
-      dispatch({ type: "setEmployees", employeeList: e })
-    );
+    getAllEmployees()
+      .then((e) => dispatch({ type: "setEmployees", employeeList: e }))
+      .catch((e) => alertError(e));
   }, []);
 
   return (
-    <section className="flex flex-col w-10/12 justify-center items-center rounded-lg px-20">
+    <section className="flex flex-col w-10/12 justify-start items-center rounded-lg px-20">
       <h1 className=" font-bold text-2xl text-tertiary-text m-7 ml-20 opacity-40">
         Employees List
       </h1>

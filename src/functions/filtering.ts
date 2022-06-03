@@ -1,10 +1,9 @@
-import { IHomePage } from "../components/HomePage";
-import { IProjectCard } from "../utils/interfaces";
+import { IProjectCard, IHomePageState } from "../utils/interfaces";
 import moment from "moment";
 
 export function testPredicates(
   project: IProjectCard,
-  state: IHomePage
+  state: IHomePageState
 ): boolean {
   const searchTextAndDateTest =
     isSearchTextInProjectName(project, state) &&
@@ -36,7 +35,7 @@ export function testPredicates(
 
 export function isSearchTextInProjectName(
   p: IProjectCard,
-  state: IHomePage
+  state: IHomePageState
 ): boolean {
   const result = p.projectName
     .toUpperCase()
@@ -46,17 +45,18 @@ export function isSearchTextInProjectName(
 
 export function isProjectInDateRange(
   p: IProjectCard,
-  state: IHomePage
+  state: IHomePageState
 ): boolean {
   if (state.dateRange === undefined) {
     return true;
   } else {
-    if (state.dateRange) {
-      return moment(p.contract.startDate).isBetween(
+    if (state.dateRange && state.dateRange[0] && state.dateRange[1]) {
+      const dateIsInRange = moment(p.contract.startDate).isBetween(
         state.dateRange[0],
         state.dateRange[1],
         "day"
       );
+      return dateIsInRange;
     }
     return true;
   }
