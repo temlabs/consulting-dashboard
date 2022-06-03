@@ -163,17 +163,10 @@ export default function HomePage(): JSX.Element {
     state.filteredEmployees,
   ]);
 
-  const callSort = (a: IProjectCard, b: IProjectCard) => {
-    const argsArr = state.sort.args;
-    if (argsArr[1]) {
-      return state.sort.sortPredicate(a, b, argsArr[0], argsArr[1]);
-    } else {
-      return state.sort.sortPredicate(a, b, argsArr[0]);
-    }
-  };
   const projectCardsOnDisplay = state.projectCards
     .filter((p) => testPredicates(p, state))
-    .sort((a, b) => callSort(a, b));
+    .sort((a, b) => state.sort.sortPredicate(a, b, state.sort.ascending));
+
   const numberOfProjectsShowing = `${projectCardsOnDisplay.length} projects showing of ${state.projectCards.length}`;
   const totalRevenueFromProjectsShowing = formatProjectSize(
     sumProjectCardContractSize(projectCardsOnDisplay).toString()

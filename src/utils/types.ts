@@ -22,5 +22,5 @@ export type Dispatch = (action: HomePageAction) => void;
 export interface Sort {
   displayName: string;
   sortPredicate: IProjectSortPredicate;
-  args: [boolean, ("startDate" | "endDate" | undefined)?];
+  ascending: boolean;
 }
