@@ -29,7 +29,9 @@ export default function EmployeeProfilePage(): JSX.Element {
         .then((pcd) =>
           dispatch({ type: "setProjectCardData", projectCards: pcd })
         )
-        .catch((e) => alertError(e, "Couldn't get the projects for this employee :("));
+        .catch((e) =>
+          alertError(e, "Couldn't get the projects for this employee :(")
+        );
     }
   }, [employeeId]);
 
