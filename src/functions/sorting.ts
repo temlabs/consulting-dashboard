@@ -13,6 +13,17 @@ export const sortingTypes: Sort[] = [
     sortPredicate: sortProjectsBySize,
     ascending: false,
   },
+
+  {
+    displayName: "Employee count ascending",
+    sortPredicate: sortProjectsByEmployeeCount,
+    ascending: true,
+  },
+  {
+    displayName: "Employee count descending",
+    sortPredicate: sortProjectsByEmployeeCount,
+    ascending: false,
+  },
   {
     displayName: "End date ascending",
     sortPredicate: sortProjectsByEndDate,
@@ -101,4 +112,14 @@ function sortProjectsByName(
   } else {
     return aBeforeB ? 1 : -1;
   }
+}
+
+function sortProjectsByEmployeeCount(
+  a: IProjectCard,
+  b: IProjectCard,
+  ascending: boolean
+): number {
+  return ascending
+    ? a.employeeIds.length - b.employeeIds.length
+    : b.employeeIds.length - a.employeeIds.length;
 }

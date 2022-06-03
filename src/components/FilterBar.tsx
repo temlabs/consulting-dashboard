@@ -85,7 +85,7 @@ export default function FilterBar({
           <select
             value={state.sort.displayName}
             onChange={(e) => updateSortPredicate(e.target.value)}
-            className=" bg-accent-teal text-white rounded-md h-8 w-48 font-semibold cursor-pointer text-center"
+            className=" bg-accent-teal text-white rounded-md h-8 w-52 font-semibold cursor-pointer text-center"
           >
             {sortingTypes.map((st) => (
               <option key={st.displayName} className=" bg-gray-500">
