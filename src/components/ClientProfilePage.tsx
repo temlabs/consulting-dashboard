@@ -8,6 +8,7 @@ import EmployeeRow from "./EmployeeRow";
 import { formatProjectSize } from "../functions/formatting";
 import { extractEmployeesFromProjects } from "../functions/dataTransformations";
 import { clientProfilePageReducer } from "../functions/Page Specific/clientprofilepagefunctions";
+import { alertError } from "../functions/errorhandling";
 
 export default function ClientProfilePage(): JSX.Element {
   const { clientId } = useParams();
@@ -40,18 +41,23 @@ export default function ClientProfilePage(): JSX.Element {
 
   useEffect(() => {
     if (clientId) {
-      getClientById(clientId).then((c) =>
-        dispatch({ type: "setClient", client: c })
-      );
-      getAllProjectCardData().then((pcd) => {
-        const clientProjects = pcd.projectCards.filter(
-          (p) => p.clientId === state.client?.id
-        );
-        dispatch({ type: "setProjects", projects: clientProjects });
-        const clientEmployees: Employee[] =
-          extractEmployeesFromProjects(clientProjects);
-        dispatch({ type: "setEmployees", employees: clientEmployees });
-      });
+      // get client info
+      getClientById(clientId)
+        .then((c) => dispatch({ type: "setClient", client: c }))
+        .catch((e) => alertError(e));
+
+      // get projectcards
+      getAllProjectCardData()
+        .then((pcd) => {
+          const clientProjects = pcd.projectCards.filter(
+            (p) => p.clientId === state.client?.id
+          );
+          dispatch({ type: "setProjects", projects: clientProjects });
+          const clientEmployees: Employee[] =
+            extractEmployeesFromProjects(clientProjects);
+          dispatch({ type: "setEmployees", employees: clientEmployees });
+        })
+        .catch((e) => alertError(e));
     }
   }, [clientId, state.client?.id]);
 

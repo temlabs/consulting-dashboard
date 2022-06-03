@@ -20,6 +20,7 @@ import {
   filterAndSortProjectCards,
 } from "../functions/Page Specific/homepagefunctions";
 import { IHomePageState } from "../utils/interfaces";
+import { alertError } from "../functions/errorhandling";
 
 export default function HomePage(): JSX.Element {
   const preInitialHomePage: IHomePageState = {
@@ -44,7 +45,7 @@ export default function HomePage(): JSX.Element {
   useEffect(() => {
     getAllProjectCardData()
       .then((pcd) => dispatch({ type: "setData", data: pcd }))
-      .catch((e) => console.log(e));
+      .catch((e) => alertError(e));
   }, []);
 
   useEffect(() => {

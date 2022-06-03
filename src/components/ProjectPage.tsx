@@ -2,6 +2,7 @@ import moment from "moment";
 import { useEffect, useReducer } from "react";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
+import { alertError } from "../functions/errorhandling";
 import { formatProjectSize } from "../functions/formatting";
 import { getProjectCardDataById } from "../functions/requests";
 import { Contract, Employee, IProjectCard } from "../utils/interfaces";
@@ -57,9 +58,9 @@ export default function ProjectPage(): JSX.Element {
 
   useEffect(() => {
     if (projectId) {
-      getProjectCardDataById(projectId).then((p) =>
-        dispatch({ type: "setProjectCard", projectCard: p })
-      );
+      getProjectCardDataById(projectId)
+        .then((p) => dispatch({ type: "setProjectCard", projectCard: p }))
+        .catch((e) => alertError(e));
     }
   });
 

@@ -4,6 +4,7 @@ import { getAllProjectCardData, getEmployeeById } from "../functions/requests";
 import { IEmployeeProfilePageState } from "../utils/interfaces";
 import ProjectCard from "./ProjectCard";
 import { employeeProfilePagereducer } from "../functions/Page Specific/employeeprofilepagefunctions";
+import { alertError } from "../functions/errorhandling";
 
 export default function EmployeeProfilePage(): JSX.Element {
   const { employeeId } = useParams();
@@ -18,16 +19,17 @@ export default function EmployeeProfilePage(): JSX.Element {
 
   useEffect(() => {
     if (employeeId) {
-      getEmployeeById(employeeId).then((e) =>
-        dispatch({ type: "setEmployeeData", employeeData: e })
-      );
+      getEmployeeById(employeeId)
+        .then((e) => dispatch({ type: "setEmployeeData", employeeData: e }))
+        .catch((e) => alertError(e));
       getAllProjectCardData()
         .then((pcd) =>
           pcd.projectCards.filter((pcd) => pcd.employeeIds.includes(employeeId))
         )
         .then((pcd) =>
           dispatch({ type: "setProjectCardData", projectCards: pcd })
-        );
+        )
+        .catch((e) => alertError(e));
     }
   }, [employeeId]);
 

@@ -1,4 +1,5 @@
 import { useEffect, useReducer } from "react";
+import { alertError } from "../functions/errorhandling";
 import { getAllClients } from "../functions/requests";
 import { Client } from "../utils/interfaces";
 import ClientRow from "./ClientRow";
@@ -24,9 +25,9 @@ export default function ClientsPage(): JSX.Element {
   const [state, dispatch] = useReducer(reducer, empyEmployeesPage);
 
   useEffect(() => {
-    getAllClients().then((c) =>
-      dispatch({ type: "setClients", clientList: c })
-    );
+    getAllClients()
+      .then((c) => dispatch({ type: "setClients", clientList: c }))
+      .catch((e) => alertError(e));
   }, []);
 
   return (
