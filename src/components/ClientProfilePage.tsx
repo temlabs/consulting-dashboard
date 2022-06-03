@@ -1,73 +1,30 @@
 import { useEffect, useReducer } from "react";
 import { useParams } from "react-router-dom";
 import { getAllProjectCardData, getClientById } from "../functions/requests";
-import { Client, Employee, IProjectCard } from "../utils/interfaces";
+import { Employee, IClientProfilePageState } from "../utils/interfaces";
 import { sumProjectCardContractSize } from "../functions/aggregating";
 import ProjectCard from "./ProjectCard";
 import EmployeeRow from "./EmployeeRow";
 import { formatProjectSize } from "../functions/formatting";
-
-// dabe0cd9baac58c46acc908b
-
-interface IClientProfilePage {
-  client: Client | undefined;
-  projects: IProjectCard[];
-  employees: Employee[];
-  projectsView: boolean;
-}
-
-type ClientProfilePageActions =
-  | { type: "setProjects"; projects: IProjectCard[] }
-  | { type: "setEmployees"; employees: Employee[] }
-  | { type: "setClient"; client: Client }
-  | { type: "toggleView"; projectsViewShowing: boolean };
-
-function reducer(
-  state: IClientProfilePage,
-  action: ClientProfilePageActions
-): IClientProfilePage {
-  switch (action.type) {
-    case "setClient":
-      return { ...state, client: action.client };
-    case "setProjects":
-      return { ...state, projects: action.projects };
-    case "setEmployees":
-      return { ...state, employees: action.employees };
-    case "toggleView":
-      return { ...state, projectsView: !state.projectsView };
-    default:
-      return state;
-  }
-}
+import { extractEmployeesFromProjects } from "../functions/dataTransformations";
+import { clientProfilePageReducer } from "../functions/Page Specific/clientprofilepagefunctions";
 
 export default function ClientProfilePage(): JSX.Element {
   const { clientId } = useParams();
-  const emptyClientProfilePage: IClientProfilePage = {
+  const emptyClientProfilePage: IClientProfilePageState = {
     client: undefined,
     projects: [],
     employees: [],
     projectsView: true,
   };
 
-  const [state, dispatch] = useReducer(reducer, emptyClientProfilePage);
+  const [state, dispatch] = useReducer(
+    clientProfilePageReducer,
+    emptyClientProfilePage
+  );
   const clientRevenue = formatProjectSize(
     sumProjectCardContractSize(state.projects).toString()
   );
-
-  function extractEmployeesFromProjects(projects: IProjectCard[]): Employee[] {
-    // returns a unique list of employees that featured in the given projects
-    const employeeList: Employee[] = [];
-
-    projects.forEach((p) => {
-      p.employees.forEach((e) => {
-        if (e && employeeList.every((el) => el.id !== e?.id)) {
-          employeeList.push(e);
-        }
-      });
-    });
-
-    return employeeList;
-  }
 
   function UpdateView(viewClicked: "projects" | "employees"): void {
     if (viewClicked === "projects") {
@@ -98,7 +55,7 @@ export default function ClientProfilePage(): JSX.Element {
     }
   }, [clientId, state.client?.id]);
 
-  const style = (viewOn: boolean) => {
+  const toggleButtonStyles = (viewOn: boolean) => {
     const onStyle = { opacity: "1" };
     const offStyle = { opacity: "0.6" };
     return viewOn ? onStyle : offStyle;
@@ -121,14 +78,14 @@ export default function ClientProfilePage(): JSX.Element {
         </div>
         <div className="flex flex-row items-center justify-center">
           <button
-            style={style(state.projectsView)}
+            style={toggleButtonStyles(state.projectsView)}
             onClick={() => UpdateView("projects")}
             className=" cursor-pointer bg-accent-teal text-white font-semibold w-28 rounded-md mx-4 my-8 text-center align-middle"
           >
             View projects
           </button>
           <button
-            style={style(!state.projectsView)}
+            style={toggleButtonStyles(!state.projectsView)}
             onClick={() => UpdateView("employees")}
             className=" cursor-pointer bg-accent-teal text-white font-semibold w-28 rounded-md mx-4 my-8 text-center align-middle"
           >

@@ -1,52 +1,33 @@
 import { useEffect, useReducer } from "react";
 import { useParams } from "react-router-dom";
 import { getAllProjectCardData, getEmployeeById } from "../functions/requests";
-import { Employee, IProjectCard } from "../utils/interfaces";
+import { IEmployeeProfilePageState } from "../utils/interfaces";
 import ProjectCard from "./ProjectCard";
-// test id 3ece4f9f06bdaf25dcdca53b
-interface IEmployeeProfilePage {
-  employee: Employee | undefined;
-  employeeProjects: IProjectCard[];
-}
-
-type EmployeeProfilePageAction =
-  | { type: "setEmployeeData"; employeeData: Employee }
-  | { type: "setProjectCardData"; projectCards: IProjectCard[] };
-
-function reducer(
-  state: IEmployeeProfilePage,
-  action: EmployeeProfilePageAction
-): IEmployeeProfilePage {
-  switch (action.type) {
-    case "setEmployeeData":
-      return { ...state, employee: action.employeeData };
-    case "setProjectCardData":
-      return { ...state, employeeProjects: action.projectCards };
-    default:
-      return state;
-  }
-}
+import { employeeProfilePagereducer } from "../functions/Page Specific/employeeprofilepagefunctions";
 
 export default function EmployeeProfilePage(): JSX.Element {
   const { employeeId } = useParams();
-  const emptyEmployeeProfilePage: IEmployeeProfilePage = {
+  const emptyEmployeeProfilePage: IEmployeeProfilePageState = {
     employee: undefined,
     employeeProjects: [],
   };
-  const [state, dispatch] = useReducer(reducer, emptyEmployeeProfilePage);
+  const [state, dispatch] = useReducer(
+    employeeProfilePagereducer,
+    emptyEmployeeProfilePage
+  );
 
   useEffect(() => {
     if (employeeId) {
       getEmployeeById(employeeId).then((e) =>
         dispatch({ type: "setEmployeeData", employeeData: e })
-      ); // dispatch
+      );
       getAllProjectCardData()
         .then((pcd) =>
           pcd.projectCards.filter((pcd) => pcd.employeeIds.includes(employeeId))
         )
         .then((pcd) =>
           dispatch({ type: "setProjectCardData", projectCards: pcd })
-        ); // dispatch
+        );
     }
   }, [employeeId]);
 

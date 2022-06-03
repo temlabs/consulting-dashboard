@@ -1,6 +1,5 @@
 import moment from "moment";
-import { IProjectCard } from "../utils/interfaces";
-import { Sort } from "../utils/types";
+import { IProjectCard, Sort } from "../utils/interfaces";
 
 export const sortingTypes: Sort[] = [
   {

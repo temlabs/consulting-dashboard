@@ -1,13 +1,13 @@
-import { IHomePage } from "./HomePage";
-import { Dispatch } from "../utils/types";
+import { IHomePageState } from "../utils/interfaces";
+import { HomePageDispatch } from "../utils/types";
 import { DatePicker } from "antd";
 import moment, { Moment } from "moment";
 import { RangeValue } from "rc-picker/lib/interface";
 import { sortingTypes } from "../functions/sorting";
 
 interface FilterBarProps {
-  state: IHomePage;
-  dispatch: Dispatch;
+  state: IHomePageState;
+  dispatch: HomePageDispatch;
   children: string;
 }
 
