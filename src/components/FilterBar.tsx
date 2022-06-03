@@ -76,6 +76,11 @@ export default function FilterBar({
                   moment().startOf("month"),
                   moment().endOf("month"),
                 ],
+                "Last Year": [
+                  moment().subtract(1, "year").startOf("year"),
+                  moment().subtract(1, "year").startOf("year"),
+                ],
+                "This Year": [moment().startOf("year"), moment()],
               }}
               value={state.dateRange}
             />
