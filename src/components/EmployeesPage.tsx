@@ -33,7 +33,7 @@ export default function EmployeesPage(): JSX.Element {
   }, []);
 
   return (
-    <section className="flex flex-col w-10/12 justify-center items-center rounded-lg px-20">
+    <section className="flex flex-col w-10/12 justify-start items-center rounded-lg px-20">
       <h1 className=" font-bold text-2xl text-tertiary-text m-7 ml-20 opacity-40">
         Employees List
       </h1>

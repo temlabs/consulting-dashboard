@@ -6,7 +6,7 @@ import {
   IProjectCard,
   IProjectCardPredicate,
 } from "../utils/interfaces";
-import { Action, Sort } from "../utils/types";
+import { HomePageAction, Sort } from "../utils/types";
 import ProjectCard from "./ProjectCard";
 import FilterBar from "./FilterBar";
 import {
@@ -14,7 +14,7 @@ import {
   isSearchTextInProjectName,
   isProjectInDateRange,
 } from "../functions/filtering";
-import { Moment } from "moment";
+import moment, { Moment } from "moment";
 import { RangeValue } from "rc-picker/lib/interface";
 import { sortingTypes } from "../functions/sorting";
 import KPICard from "./KPICard";
@@ -38,12 +38,43 @@ export interface IHomePage {
   sort: Sort;
 }
 
-function reducer(state: IHomePage, action: Action): IHomePage {
+function init(preInitialState: IHomePage): IHomePage {
+  const savedFromDate = sessionStorage.getItem("fromDate");
+  const savedToDate = sessionStorage.getItem("toDate");
+  let initialDateRange = undefined;
+  if (savedToDate && savedFromDate) {
+    initialDateRange = [
+      moment(savedFromDate),
+      moment(savedToDate),
+    ] as RangeValue<Moment>;
+  }
+  const savedSortDisplayName = sessionStorage.getItem("sort");
+  const initialSort: Sort =
+    sortingTypes.find((s) => s.displayName === savedSortDisplayName) ||
+    sortingTypes[0];
+
+  const initalisedState = {
+    ...preInitialState,
+    searchText: sessionStorage.getItem("searchText") || "",
+    dateRange: initialDateRange,
+    filteredClients: JSON.parse(
+      sessionStorage.getItem("filteredClients") || "[]"
+    ),
+    filteredEmployees: JSON.parse(
+      sessionStorage.getItem("filteredEmployees") || "[]"
+    ),
+    sort: initialSort,
+  };
+
+  return initalisedState;
+}
+
+function reducer(state: IHomePage, action: HomePageAction): IHomePage {
   switch (action.type) {
-    case "addClientToFilter":
+    case "addClientsToFilter":
       return {
         ...state,
-        filteredClients: [...state.filteredClients, action.clientToAdd],
+        filteredClients: [...state.filteredClients, ...action.clientToAdd],
       };
     case "removeClientFromFilter":
       return {
@@ -52,10 +83,13 @@ function reducer(state: IHomePage, action: Action): IHomePage {
           (c) => c.id !== action.clientToREmove.id
         ),
       };
-    case "addEmployeeToFilter":
+    case "addEmployeesToFilter":
       return {
         ...state,
-        filteredEmployees: [...state.filteredEmployees, action.employeeToAdd],
+        filteredEmployees: [
+          ...state.filteredEmployees,
+          ...action.employeeToAdd,
+        ],
       };
     case "removeEmployeeFromFilter":
       return {
@@ -96,13 +130,38 @@ export default function HomePage(): JSX.Element {
     filteredEmployees: [],
     sort: sortingTypes[0],
   };
-  const [state, dispatch] = useReducer(reducer, initialHomePage);
+  const [state, dispatch] = useReducer(reducer, initialHomePage, init);
 
   useEffect(() => {
     getAllProjectCardData()
       .then((pcd) => dispatch({ type: "setData", data: pcd }))
       .catch((e) => console.log(e));
   }, []);
+
+  useEffect(() => {
+    //save filtering and sorting to local storage on change
+    sessionStorage.setItem("searchText", state.searchText);
+    if (state.dateRange && state.dateRange[0] && state.dateRange[1]) {
+      sessionStorage.setItem("fromDate", state.dateRange[0]?.format());
+      sessionStorage.setItem("toDate", state.dateRange[1]?.format());
+    }
+
+    sessionStorage.setItem(
+      "filteredClients",
+      state.filteredClients.map((c) => JSON.stringify(c)).join(",")
+    );
+    sessionStorage.setItem(
+      "filteredEmployees",
+      state.filteredEmployees.map((e) => JSON.stringify(e)).join(",")
+    );
+    sessionStorage.setItem("sort", state.sort.displayName);
+  }, [
+    state.dateRange,
+    state.searchText,
+    state.sort,
+    state.filteredClients,
+    state.filteredEmployees,
+  ]);
 
   const callSort = (a: IProjectCard, b: IProjectCard) => {
     const argsArr = state.sort.args;

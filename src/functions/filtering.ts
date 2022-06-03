@@ -51,12 +51,13 @@ export function isProjectInDateRange(
   if (state.dateRange === undefined) {
     return true;
   } else {
-    if (state.dateRange) {
-      return moment(p.contract.startDate).isBetween(
+    if (state.dateRange && state.dateRange[0] && state.dateRange[1]) {
+      const dateIsInRange = moment(p.contract.startDate).isBetween(
         state.dateRange[0],
         state.dateRange[1],
         "day"
       );
+      return dateIsInRange;
     }
     return true;
   }

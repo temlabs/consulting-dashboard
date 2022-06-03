@@ -16,10 +16,7 @@ export default function FilterBar({
   dispatch,
   children,
 }: FilterBarProps): JSX.Element {
-  function updateDateRange(
-    values: RangeValue<Moment>,
-    formatstring: [string, string]
-  ): void {
+  function updateDateRange(values: RangeValue<Moment>): void {
     if (values !== undefined && values !== null && values[0] && values[1]) {
       dispatch({ type: "setDateRange", newDateRange: values });
     } else {
@@ -80,6 +77,7 @@ export default function FilterBar({
                   moment().endOf("month"),
                 ],
               }}
+              value={state.dateRange}
             />
           </div>
         </div>
